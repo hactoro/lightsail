@@ -2,14 +2,14 @@ const express = require('express');
 const app = express();
 const env = require('dotenv');
 
-const port = 5003;
-env.config();
 
+// env.config();
 
+const { PORT } = process.env;
 app.get('/', (req, res)=>{
     console.log("main")
     res.send("hello");
 })
-app.listen(port, ()=>{
-    console.log(`listen on port : ${port}`);
+app.listen(PORT, ()=>{
+    console.log(`listen on port : ${PORT}`);
 })
