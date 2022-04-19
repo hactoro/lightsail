@@ -1,8 +1,8 @@
 {
 
   "scripts": {
-    "start": "env-cmd node src/server.js",
-    "dev": "env-cmd nodemon src/server.js"
+    "start": "env-cmd -f .env.production node src/server.js",
+    "dev": "env-cmd -f .env.development nodemon src/server.js"
 
   },
 
