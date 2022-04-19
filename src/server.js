@@ -1,15 +1,17 @@
 const express = require('express');
 const app = express();
 const env = require('dotenv');
+const path = require("path");
 
-
+console.log(path.join(__dirname, "../react-front/build"));
 // env.config();
 
 const { PORT } = process.env;
-app.get('/', (req, res)=>{
-    console.log("main")
-    res.send("hello");
+app.use(express.static(path.join(__dirname, "../react-front/build")));
+app.get("/", (req, res)=>{
+    res.sendFile(path.join(__dirname, "../react-front/build", "index.html"))
 })
+
 app.listen(PORT, ()=>{
     console.log(`listen on port : ${PORT}`);
 })

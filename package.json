@@ -1,7 +1,9 @@
 {
 
   "scripts": {
+
     "start": "env-cmd -f .env.production node src/server.js",
+
     "dev": "env-cmd -f .env.development nodemon src/server.js"
 
   },
@@ -16,7 +18,9 @@
 
     "node": "^17.7.2",
 
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+
+    "pm2": "^5.2.0"
 
   }
 
