@@ -2,27 +2,45 @@ const express = require('express');
 const app = express();
 const env = require('dotenv');
 const path = require("path");
+const mongoose = require('mongoose');
+const {raceRouter} = require('./routes');
+const cors = require('cors');
 
-console.log(path.join(__dirname, "../react-front/build"));
 
-let { PORT } = process.env;
-if ( PORT === undefined) {
-    console.log(PORT);
-    console.log("hello");
-    env.config();
-    PORT = process.env.PORT;
+const { PORT, MONGO_URI } = process.env;
 
+const server = async () => {
+
+    await mongoose.connect(MONGO_URI);
+    console.log("mongo db connected!");
+    
+    app.use(cors());
+    app.use(express.json());
+    app.use(cors());
+
+    app.use(express.static(path.join(__dirname, "../killkilltime/build")));
+    app.get("/", (req, res)=>{
+            res.sendFile(path.join(__dirname, "../killkilltime/build", "index.html"))
+    })
+    app.use('/admin/contents/race', raceRouter);
+    app.listen(PORT, ()=>{
+        console.log(`listen on port: ${PORT}`);
+    })
+    
 }
 
-app.use(express.static(path.join(__dirname, "../react-front/build")));
+server();
 
-app.get("/list", (req, res)=>{
-    res.send({"message":"hello"});
-})
-app.get("/", (req, res)=>{
-    res.sendFile(path.join(__dirname, "../react-front/build", "index.html"))
-})
 
-app.listen(PORT, ()=>{
-    console.log(`listen on port : ${PORT}`);
-})
+// app.use(express.static(path.join(__dirname, "../react-front/build")));
+
+// app.get("/list", (req, res)=>{
+//     res.send({"message":"hello"});
+// })
+// app.get("/", (req, res)=>{
+//     res.sendFile(path.join(__dirname, "../react-front/build", "index.html"))
+// })
+
+// app.listen(PORT, ()=>{
+//     console.log(`listen on port : ${PORT}`);
+// })
