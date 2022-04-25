@@ -1,9 +1,12 @@
-const {Schema, model} = require('mongoose');
+const {Schema, model, Types} = require('mongoose');
+
 
 const RaceContentSchema = Schema({
     name: {type:String, required:true},
+    content: {type:String},
     src: {type:String, required:true},
-    category: {type:String, required: true},
+    mediaType: {type:String, required:true},
+    categoryId: {type:Types.ObjectId, required: true, ref: 'RaceList'},
     statics: {
         win: {type:Number},
         lose: {type:Number}
