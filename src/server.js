@@ -16,7 +16,6 @@ const server = async () => {
     
     app.use(cors());
     app.use(express.json());
-    app.use(cors());
 
     app.use(express.static(path.join(__dirname, "../killkilltime/build")));
     app.get("/", (req, res)=>{
@@ -29,18 +28,12 @@ const server = async () => {
     
 }
 
-server();
+if(!MONGO_URI) {
+    console.log("MONGO_URI 가 필요합니다. 환경 변수 셋팅을 해주세요.");
+}else{
+    server();
+}
 
 
-// app.use(express.static(path.join(__dirname, "../react-front/build")));
 
-// app.get("/list", (req, res)=>{
-//     res.send({"message":"hello"});
-// })
-// app.get("/", (req, res)=>{
-//     res.sendFile(path.join(__dirname, "../react-front/build", "index.html"))
-// })
 
-// app.listen(PORT, ()=>{
-//     console.log(`listen on port : ${PORT}`);
-// })
