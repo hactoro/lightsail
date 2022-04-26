@@ -18,10 +18,13 @@ const server = async () => {
     app.use(express.json());
 
     app.use(express.static(path.join(__dirname, "../killkilltime/build")));
-    app.get("/", (req, res)=>{
+    app.use('/admin/contents/race', raceRouter);
+    
+    app.get("*", (req, res)=>{
             res.sendFile(path.join(__dirname, "../killkilltime/build", "index.html"))
     })
-    app.use('/admin/contents/race', raceRouter);
+
+
     app.listen(PORT, ()=>{
         console.log(`listen on port: ${PORT}`);
     })
