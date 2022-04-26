@@ -18,7 +18,7 @@ raceRouter.get('/', async(req, res)=>{
 
 raceRouter.post('/enroll', async(req, res)=>{
     try{
-        const { name, src, categoryId, mediaType } = req.body;
+        const { name, src, categoryId, mediaType, group } = req.body;
         if (!name || !src || !categoryId || !mediaType) 
             throw new Error(`이름: ${name}, src: ${src}, category: ${categoryId}, mediaType: ${mediaType} 모두 필요합니다.`)
         
@@ -26,7 +26,8 @@ raceRouter.post('/enroll', async(req, res)=>{
             name: name,
             src: src,
             categoryId: categoryId,
-            mediaType: mediaType
+            mediaType: mediaType,
+            group: group
         })
         await race.save();
         res.send(race);

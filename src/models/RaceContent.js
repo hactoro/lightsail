@@ -3,6 +3,7 @@ const {Schema, model, Types} = require('mongoose');
 
 const RaceContentSchema = Schema({
     name: {type:String, required:true},
+    group: {type:String},
     content: {type:String},
     src: {type:String, required:true},
     mediaType: {type:String, required:true},
