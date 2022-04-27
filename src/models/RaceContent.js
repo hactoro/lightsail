@@ -10,7 +10,8 @@ const RaceContentSchema = Schema({
     categoryId: {type:Types.ObjectId, required: true, ref: 'RaceList'},
     statics: {
         win: {type:Number},
-        lose: {type:Number}
+        lose: {type:Number},
+        finalWin: {type:Number}
     }
 },{
     timestams: true
