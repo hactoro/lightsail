@@ -5,9 +5,24 @@ const { isValidObjectId } = require('mongoose');
 
 const raceRouter = Router();
 
+raceRouter.get('/player/:id', async(req, res)=>{
+    
+    try{
+        const {id} = req.params;
+        if(!isValidObjectId(id)) throw new Error("Id is not valid");
+        const player = await RaceContent.findById(id);
+        res.send({player: player});
+
+    }catch(err){
+        res.status(400).send({err:err.message});
+    }
+
+
+})
+
+
 raceRouter.get('/', async(req, res)=>{
     const { categoryId, limit } = req.query;
-    console.log(categoryId);
     try{
         if(!limit) throw new Error("Ideal race round number is required");
         const candidates = await RaceContent.find({categoryId:categoryId}).limit(limit);
@@ -89,12 +104,8 @@ raceRouter.patch('/finalwin/:id', async(req, res)=>{
     }
 })
 
-
-
-
 raceRouter.get('/racelist', async(req,res)=>{
     try{
-        console.log("hello?");
         const raceList = await RaceList.find();
         res.send({raceList: raceList});
     }catch(err){
