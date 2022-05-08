@@ -130,7 +130,7 @@ raceRouter.patch('/result/set/list', async(req, res)=>{
             res.status(400).send({err:err.message})
         }
     });
-    
+
     raceRouter.patch('/lose/:id', async(req, res)=>{
     try{
         const {id} = req.params;
@@ -191,6 +191,19 @@ raceRouter.post('/racelist', async(req, res)=>{
     }
 });
 
+raceRouter.get('/ranks', async(req, res)=>{
+    try{
+        const { cateId } = req.query; //pagination은 차후!
+        const ranks = await RaceContent.find({categoryId: cateId}).sort({'statics.finalWin': 'desc', 'statics.win':'desc'});
 
+        res.send({ranks: ranks})
+        
+
+    }catch(err){
+        res.status(400).send({err:err.message})
+
+    }
+
+})
 
 module.exports = {raceRouter};
