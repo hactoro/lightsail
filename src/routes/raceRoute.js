@@ -53,24 +53,85 @@ raceRouter.post('/enroll', async(req, res)=>{
     }
 });
 
-raceRouter.patch('/win/:id', async(req, res)=>{
-    try{
-        const {id} = req.params;
-        if (!isValidObjectId(id)) throw new Error("id is not available");
-        const finded = await RaceContent.findById({_id:id});
-        let newWinCnt = 1;
-        if (finded.statics.win){
-            newWinCnt = finded.statics.win + 1;
-        }
-        const updated = await RaceContent.findByIdAndUpdate({_id:id},{'statics.win':newWinCnt},{new:true})
-        
-        res.send(updated);
-    }catch(err){
-        res.status(400).send({err:err.message})
-    }
-});
 
-raceRouter.patch('/lose/:id', async(req, res)=>{
+// 게임별 최종우승, 승리, 패배 기록
+raceRouter.patch('/result/set/list', async(req, res)=>{
+    try{
+        const {raceRecords} = req.body;
+        
+        raceRecords.map( async(item)=>{
+            // if(!isValidObjectId(item.id)) 
+            const addFinalCnt = item.finalCnt;
+            const addWinCnt = item.winCnt;
+            const addLoseCnt = item.loseCnt;
+            
+            console.log(item);
+            
+            const player = await RaceContent.findById({_id:item.id});
+            
+            let newFinalCnt = 0;
+            let newWinCnt = 0;
+            let newLoseCnt = 0;
+            
+            if (addFinalCnt){
+                if(player.statics.finalWin) newFinalCnt = player.statics.finalWin + 1;
+                else newFinalCnt = 1;
+            }else{
+                newFinalCnt = player.statics.finalWin;
+            }
+            if (addWinCnt){
+                if(player.statics.win) newWinCnt = player.statics.win + addWinCnt;
+                else newWinCnt = 1;
+            }else{
+                newWinCnt = player.statics.win;
+            }
+            if (addLoseCnt){
+                if(player.statics.lose) newLoseCnt = player.statics.lose + 1;
+                else newLoseCnt = 1;
+            }else{
+                newLoseCnt = player.statics.lose;
+            }
+            
+            await RaceContent.findByIdAndUpdate(
+                {_id:item.id}, 
+                {
+                    $set: {
+                        
+                        'statics.finalWin': newFinalCnt,
+                        'statics.win': newWinCnt,
+                        'statics.lose': newLoseCnt
+                    }
+                }
+                ); 
+            })
+            
+            res.status(200).send({message:"success"})
+            
+        }catch(err){
+            res.status(400).send({err:err.message});
+        }
+        
+    });
+    
+    // id별 승자 기록
+    raceRouter.patch('/win/:id', async(req, res)=>{
+        try{
+            const {id} = req.params;
+            if (!isValidObjectId(id)) throw new Error("id is not available");
+            const finded = await RaceContent.findById({_id:id});
+            let newWinCnt = 1;
+            if (finded.statics.win){
+                newWinCnt = finded.statics.win + 1;
+            }
+            const updated = await RaceContent.findByIdAndUpdate({_id:id},{'statics.win':newWinCnt},{new:true})
+            
+            res.send(updated);
+        }catch(err){
+            res.status(400).send({err:err.message})
+        }
+    });
+    
+    raceRouter.patch('/lose/:id', async(req, res)=>{
     try{
         const {id} = req.params;
         if (!isValidObjectId(id)) throw new Error("id is not available");
