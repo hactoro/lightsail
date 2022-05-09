@@ -191,10 +191,11 @@ raceRouter.post('/racelist', async(req, res)=>{
     }
 });
 
+// 순위 
 raceRouter.get('/ranks', async(req, res)=>{
     try{
         const { cateId } = req.query; //pagination은 차후!
-        const ranks = await RaceContent.find({categoryId: cateId}).sort({'statics.finalWin': 'desc', 'statics.win':'desc'});
+        const ranks = await RaceContent.find({categoryId: cateId}).limit(10).sort({'statics.finalWin': 'desc', 'statics.win':'desc'});
 
         res.send({ranks: ranks})
         
