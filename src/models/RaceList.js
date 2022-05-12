@@ -4,7 +4,7 @@ const RaceListSchema = Schema({
     title: {type: String, required: true, unique: true},
     content: {type: String},
     src: {type: String, required: true},
-    mediaType: {type: String, require: true}
+    mediaType: {type: String, required: true}
 });
 
 const RaceList = model("RaceList", RaceListSchema);

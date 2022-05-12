@@ -3,7 +3,7 @@ const app = express();
 const env = require('dotenv');
 const path = require("path");
 const mongoose = require('mongoose');
-const {raceRouter} = require('./routes');
+const {raceRouter, quizRouter} = require('./routes');
 const cors = require('cors');
 
 
@@ -19,6 +19,7 @@ const server = async () => {
 
     app.use(express.static(path.join(__dirname, "../killkilltime/build")));
     app.use('/admin/contents/race', raceRouter);
+    app.use('/admin/contents/quiz', quizRouter);
     
     app.get("*", (req, res)=>{
             res.sendFile(path.join(__dirname, "../killkilltime/build", "index.html"))

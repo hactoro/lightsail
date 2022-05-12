@@ -1,3 +1,4 @@
 module.exports = {
-    ...require('./raceRoute')
+    ...require('./raceRoute'),
+    ...require('./quizRoute')
 }
