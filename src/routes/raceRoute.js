@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { RaceContent } = require('../models');
 const { RaceList } = require('../models/RaceList');
-const { isValidObjectId } = require('mongoose');
+const { isValidObjectId, Types } = require('mongoose');
 
 const raceRouter = Router();
 
@@ -23,13 +23,16 @@ raceRouter.get('/player/:id', async(req, res)=>{
 
 raceRouter.get('/', async(req, res)=>{
     const { categoryId, limit } = req.query;
+
     try{
         if(!limit) throw new Error("Ideal race round number is required");
-        const candidates = await RaceContent.find({categoryId:categoryId}).limit(limit);
+        const candidates = await RaceContent.aggregate([{$match: {categoryId: Types.ObjectId(categoryId)}}, {$sample: {size: Number(limit)}} ]);
+        
+        // const candidates = await RaceContent.find({categoryId:categoryId}).limit(limit);
         res.send({candidates: candidates});
     }catch(err){
         res.send({err: err.message});
-    }
+    }   
 }) 
 
 raceRouter.post('/enroll', async(req, res)=>{
